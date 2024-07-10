@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="test_template_view" name="Test template name">
+    <link rel="stylesheet" href="hr_apis/static/js/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-sidebar-v2@3.1.0/css/leaflet-sidebar.min.css" />
+
+        <div>
+
+            <div class="button-container">
+                <button onclick="showLocation()">Show My Location</button>
+            </div>
+            <div id="map" style="height: 600px; width: 100%;"></div>
+            <div id="sidebar" class="leaflet-sidebar collapsed">
+                <div class="leaflet-sidebar-tabs">
+                    <ul role="tablist">
+                        <li><a href="#markers" role="tab"><i class="fa fa-map-marker"></i></a></li>
+                    </ul>
+                </div>
+                <div class="leaflet-sidebar-content">
+
+                    <div class="leaflet-sidebar-pane" id="markers">
+                        <h1 class="leaflet-sidebar-header">Active Markers</h1>
+                        <div id="marker-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add your JavaScript here -->
+        <script src="/hr_apis/static/js/leaflet/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet-sidebar-v2@3.1.0/js/leaflet-sidebar.min.js"></script>
+        <script>
+
+        var locations = [{
+            name: "<t t-esc="employee.employee_id.name"/>",
+            lat: <t t-esc="employee.lat_longin or 0.0" />,
+            long: <t t-esc="employee.long_longin or 0.0" />
+        }];
+        locations.push(
+            <t t-foreach="child_emps" t-as="child">
+                {
+                    name: '<t t-esc="child.employee_id.name" />',
+                    lat: <t t-esc="child.lat_longin or 0.0" /> ,
+                    long: <t t-esc="child.long_longin or 0.0" />
+                },
+            </t>);
+        console.log(locations);
+        
+        </script>
+        <script type="text/javascript" src="/hr_apis/static/js/test.js"></script>
+
+    </template>
+
+</odoo>

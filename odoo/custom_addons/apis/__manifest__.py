@@ -9,7 +9,12 @@
     'category': '',
     'depends': [
         'base',
-        'hr_attendance'
+        'hr_attendance',
+        'hr'
+    ],
+    'data':[
+        'report/employee_xls.xml',
+        'report/test_report.xml'
     ],
     'auto_install': False,
     'application': False,

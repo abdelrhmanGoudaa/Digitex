@@ -4,22 +4,34 @@ import json
 from odoo.http import Response
 from odoo.exceptions import AccessDenied
 from odoo import SUPERUSER_ID
+from odoo.addons.web.controllers.main import DataSet
 
-class Test(http.Controller):
+
+class Test(DataSet):
 
     @http.route(route='/testing',type='json',auth='public',methods=['POST'],csrf=False)
-    def test(self,**kw):
-        data = kw.copy()
-        print('kw',kw)
-        print(data)
-        data = request.httprequest.data.decode()
-        print(data)
+    def test(self):
+        reqdata = json.loads(request.httprequest.data)
+        print(reqdata)
+        print(type(reqdata))
         print('INside TEsting')
-        user = request.env['res.users'].with_user(SUPERUSER_ID).search([('login','=','admin')]) 
-        print(user)
-        print(user.id,user.name)
+        suuser = request.env['res.users'].with_user(SUPERUSER_ID).search([('login','=',reqdata.get('username'))]) 
+        user = request.env['res.users'].with_user(1).search([('login','=','admin')]) 
+        suuser.with_user(user)._check_credentials(password=reqdata.get('password'),
+                    user_agent_env={'interactive': False})
+        print(suuser)
+        print(suuser.id,user.name)
         return 'testtt'
 
+    @http.route(route='/create_emp',type='json',auth='user',methods=['POST'],csrf=False)
+    def create_emp(self):
+        # fetch the data from the request 
+        employee = json.loads(request.httprequest.data)
+        model = 'hr.employee'
+        method = 'create'
+        args = [{"name": employee.get('name')}]
+        kwargs = {}
+        return self._call_kw(model, method, args, kwargs)
 
     @http.route('/user_login_test', methods=['POST'], type='json', auth='public', csrf=False)
     def user_login(self, **kw):

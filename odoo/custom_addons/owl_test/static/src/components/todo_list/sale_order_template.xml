@@ -1,0 +1,7 @@
+<templates>
+   <t t-name="SaleCust">
+       <div>
+           <h1>HEllo from sale Custooooooooooooooooom</h1>
+       </div>
+   </t>
+</templates>

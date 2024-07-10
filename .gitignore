@@ -39,7 +39,14 @@ tsconfig.json
 package-lock.json
 package.json
 .husky
+# IDE specific files
+.idea/
+.vscode/
+*.iml
 
+# Odoo logs
+*.log
+*.data
 # various virtualenv
 /bin/
 /build/
@@ -49,3 +56,4 @@ package.json
 /man/
 /share/
 /src/
+/enterprise-15.0/
