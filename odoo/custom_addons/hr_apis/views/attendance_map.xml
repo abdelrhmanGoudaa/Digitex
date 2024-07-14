@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_custom_template_map" model="ir.actions.act_url">
+        <field name="name">Map Template</field>
+        <field name="type">ir.actions.act_url</field>
+        <field name="url">/template</field>
+        <field name="target">self</field>
+    </record>
+
+    <menuitem
+        id="hr_attendance_menu_map"
+        name="Attendance Map" parent="hr_attendance.menu_hr_attendance_root" sequence="10" groups="hr_attendance.group_hr_attendance_user" action="action_custom_template_map"/>
+
+</odoo>
