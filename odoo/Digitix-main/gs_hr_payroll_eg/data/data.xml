@@ -87,7 +87,7 @@
         <field name="condition_python">result = TAXABLE >= 1250 or False
         </field>
         <field name="amount_select">code</field>
-        <field name="amount_python_compute">result = contract.calculate_eg_tax(TAXABLE)
+        <field name="amount_python_compute">result = -(contract.calculate_eg_tax(TAXABLE))
         </field>
         <field name="sequence" eval="180"/>
         <field name="note">Income tax deduction

@@ -46,38 +46,96 @@ class HrContract(models.Model):
         alw_id = self.other_alw_ids.filtered(lambda x: x.code == alw_code)
         return alw_id
 
-    def calculate_eg_tax(self, amount):
-        TAX_lEVELS = [[1, 40000, 0],
-                      [40000, 55000, 10],
-                      [55000, 70000, 15],
-                      [70000, 200000, 20],
-                      [200000, 400000, 22.5]]
+    # def calculate_eg_tax(self, amount):
+    #     TAX_lEVELS = [[1, 40000, 0],
+    #                   [40000, 55000, 10],
+    #                   [55000, 70000, 15],
+    #                   [70000, 200000, 20],
+    #                   [200000, 400000, 22.5]]
 
-        annual_salary = (amount * 12)
+    #     annual_salary = (amount * 12)
+    #     if annual_salary > 0:
+    #         annual_salary -= 9000
+    #     print(amount, annual_salary)
+    #     tax_amounts = []
+    #     total_tax = 0
+    #     levels = []
+    #     if annual_salary <= 600000:
+    #         levels = TAX_lEVELS
+    #     elif 600000 < annual_salary <= 700000:
+    #         levels = TAX_lEVELS[1:]
+    #         levels[0][0] = 0
+    #     elif 700000 < annual_salary <= 800000:
+    #         levels = TAX_lEVELS[2:]
+    #         levels[0][0] = 0
+    #     elif 800000 < annual_salary <= 900000:
+    #         levels = TAX_lEVELS[3:]
+    #         levels[0][0] = 0
+    #     elif 900000 < annual_salary <= 1000000:
+    #         levels = TAX_lEVELS[4:]
+    #         levels[0][0] = 0
+    #     elif annual_salary > 1000000:
+    #         levels = [TAX_lEVELS[5]]
+    #         levels[0][0] = 0
+
+
+    #     for level in levels:
+    #         if annual_salary < level[0]:
+    #             continue
+    #         elif annual_salary > level[1]:
+    #             tax_amount = (level[1] - level[0]) * level[2] / 100
+    #             tax_amounts.append(tax_amount)
+    #             continue
+    #         elif level[0] < annual_salary <= level[1]:
+    #             tax_amount = (annual_salary - level[0]) * level[2] / 100
+    #             tax_amounts.append(tax_amount)
+
+    #     if annual_salary > 400000:
+    #         tax_amount = (annual_salary - 400000) * 0.25
+    #         tax_amounts.append(tax_amount)
+
+    #     if tax_amounts:
+    #         total_tax = sum(tax_amounts) / 12
+    #     return total_tax
+
+    # -------------------edit func--------------------
+    def calculate_eg_tax(self, amount):
+        TAX_LEVELS = [
+            [0, 40000, 0],
+            [40000, 55000, 10],
+            [55000, 70000, 15],
+            [70000, 200000, 20],
+            [200000, 400000, 22.5],
+            [400000, 1200000, 25]
+            # ,[1200000, float('inf'), 27.5]
+        ]
+
+        annual_salary = amount * 12
         if annual_salary > 0:
-            annual_salary -= 9000
-        print(amount, annual_salary)
+            annual_salary -= 20000  
+
+        print('amount:', amount, 'annual_salary:', annual_salary)
         tax_amounts = []
         total_tax = 0
         levels = []
+
         if annual_salary <= 600000:
-            levels = TAX_lEVELS
+            levels = TAX_LEVELS
         elif 600000 < annual_salary <= 700000:
-            levels = TAX_lEVELS[1:]
+            levels = TAX_LEVELS[1:]
             levels[0][0] = 0
         elif 700000 < annual_salary <= 800000:
-            levels = TAX_lEVELS[2:]
+            levels = TAX_LEVELS[2:]
             levels[0][0] = 0
         elif 800000 < annual_salary <= 900000:
-            levels = TAX_lEVELS[3:]
+            levels = TAX_LEVELS[3:]
             levels[0][0] = 0
-        elif 900000 < annual_salary <= 1000000:
-            levels = TAX_lEVELS[4:]
+        elif 900000 < annual_salary <= 1200000:
+            levels = TAX_LEVELS[4:]
             levels[0][0] = 0
-        elif annual_salary > 1000000:
-            levels = [TAX_lEVELS[5]]
+        elif annual_salary > 1200000:
+            levels = TAX_LEVELS[5:]
             levels[0][0] = 0
-
 
         for level in levels:
             if annual_salary < level[0]:
@@ -85,19 +143,18 @@ class HrContract(models.Model):
             elif annual_salary > level[1]:
                 tax_amount = (level[1] - level[0]) * level[2] / 100
                 tax_amounts.append(tax_amount)
-                continue
-            elif level[0] < annual_salary <= level[1]:
+            else:
                 tax_amount = (annual_salary - level[0]) * level[2] / 100
                 tax_amounts.append(tax_amount)
+                break
 
-        if annual_salary > 400000:
-            tax_amount = (annual_salary - 400000) * 0.25
-            tax_amounts.append(tax_amount)
+        if annual_salary > 1200000:
+            extra_tax_amount = (annual_salary - 1200000) * 0.275
+            tax_amounts.append(extra_tax_amount)
 
         if tax_amounts:
             total_tax = sum(tax_amounts) / 12
         return total_tax
-
 
 class HrAlwLine(models.Model):
     _name = "hr.alw.line"
